@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SPY — Party Game</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#651bc0;color:#fff;font-family:Arial,sans-serif}
+.app{min-height:100vh;min-height:100dvh;padding:22px 18px 30px;background:radial-gradient(circle at 10% 10%,#8d3be0,transparent 30%),linear-gradient(145deg,#7627d1,#5010a5)}
+.screen{max-width:520px;min-height:calc(100vh - 52px);margin:auto;display:flex;flex-direction:column}
+.hidden{display:none!important}
+.logo{font-size:30px;font-weight:1000;letter-spacing:-2px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.menu{width:44px;height:44px;border-radius:50%;background:#ffffff18;color:#fff;border:1px solid #ffffff30;font-size:22px}
+.hero{text-align:center;margin:auto 0}
+.hero h1{font-size:82px;line-height:.85;margin:0;font-weight:1000;letter-spacing:-7px}
+.hero p{color:#ffffffb5;line-height:1.5;font-size:17px;margin:25px auto;max-width:380px}
+.primary{width:100%;min-height:60px;border:0;border-radius:32px;background:#ffda2f;color:#35106d;font-size:19px;font-weight:900;box-shadow:0 6px #3f087e55}
+.primary:active{transform:translateY(3px);box-shadow:0 3px #3f087e55}
+.secondary{width:100%;min-height:56px;border-radius:30px;background:#ffffff12;color:#fff;border:2px solid #ffffff2e;font-weight:800;margin-top:12px}
+.title{font-size:35px;font-weight:1000;letter-spacing:-2px;margin:8px 0}
+.sub{color:#ffffffad;line-height:1.45;margin-top:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.choice{min-height:86px;padding:15px;border-radius:22px;background:#ffffff10;color:#fff;border:2px solid #ffffff26;text-align:left;font-weight:900;font-size:16px}
+.choice small{display:block;color:#ffffff88;margin-top:5px;font-weight:600}
+.choice.selected{background:#ffda2f;color:#35106d;border-color:#ffda2f}
+.numbers{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+.number{height:58px;border-radius:19px;background:#ffffff12;color:#fff;border:2px solid #ffffff26;font-weight:900;font-size:18px}
+.number.selected{background:#ffda2f;color:#35106d;border-color:#ffda2f}
+.center{margin:auto 0;text-align:center}
+.badge{width:95px;height:95px;margin:auto;border-radius:30px;background:#ffda2f;color:#35106d;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:1000;box-shadow:0 7px #3f087e55}
+.panel{padding:25px;border-radius:28px;background:#ffffff10;border:2px solid #ffffff22;margin:18px 0}
+.player{font-size:15px;color:#ffffff9e;font-weight:800}
+.role{font-size:43px;font-weight:1000;margin:8px 0}
+.word{font-size:48px;font-weight:1000;line-height:1;margin:10px 0;letter-spacing:-2px}
+.clue{color:#fffbd1;font-size:17px;line-height:1.45}
+.spybox{background:#d82b78!important;border-color:#ff7cac!important}
+.spybox .role{font-size:48px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:25px 0}
+.card{aspect-ratio:1/1.25;border-radius:24px;background:linear-gradient(145deg,#9c4be7,#6320bd);border:3px solid #ffffff65;color:#fff;font-size:42px;font-weight:1000;box-shadow:0 7px 0 #3d087955}
+.card:active{transform:scale(.96)}
+.timer{font-size:76px;font-weight:1000;margin:15px 0}
+.vote-list{display:grid;gap:10px;margin:20px 0}
+.vote{min-height:58px;padding:15px 18px;border-radius:20px;background:#ffffff12;color:#fff;border:2px solid #ffffff26;text-align:left;font-weight:900}
+.vote.selected{background:#ffda2f;color:#35106d}
+.result-icon{font-size:80px;margin-bottom:10px}
+.big{font-size:40px;font-weight:1000;line-height:1.05;letter-spacing:-2px}
+.footer{margin-top:auto;padding-top:20px;text-align:center;color:#ffffff66;font-size:12px}
+input{width:100%;padding:16px;border-radius:18px;border:2px solid #ffffff25;background:#ffffff10;color:#fff;font-size:18px;outline:0}
+input::placeholder{color:#ffffff70}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<!-- HOME -->
+<section id="home" class="screen">
+<div class="top"><div class="logo">SPY</div><button class="menu" onclick="alert('SPY Party Game')">☰</button></div>
+<div class="hero">
+<h1>SPY</h1>
+<p>A secret word. One hidden Spy. Ask clever questions, find the Spy, and survive the vote.</p>
+<button class="primary" onclick="show('category')">START GAME</button>
+</div>
+<div class="footer">Pass the phone • Play together • Find the Spy</div>
+</section>
+
+<!-- CATEGORY -->
+<section id="category" class="screen hidden">
+<div class="top"><div class="logo">SPY</div></div>
+<h2 class="title">Choose a category</h2>
+<p class="sub">Pick what everyone will secretly know.</p>
+<div id="categories" class="grid"></div>
+<button class="primary" onclick="goPlayers()">CONTINUE</button>
+<button class="secondary" onclick="show('home')">BACK</button>
+</section>
+
+<!-- PLAYERS -->
+<section id="players" class="screen hidden">
+<div class="top"><div class="logo">SPY</div></div>
+<h2 class="title">How many players?</h2>
+<p class="sub">Choose between 3 and 12 players.</p>
+<div id="numbers" class="numbers"></div>
+<div class="panel">
+<div class="player">SELECTED PLAYERS</div>
+<div id="playerCount" class="big">5</div>
+</div>
+<button class="primary" onclick="startGame()">CREATE ROUND</button>
+<button class="secondary" onclick="show('category')">BACK</button>
+</section>
+
+<!-- PASS -->
+<section id="pass" class="screen hidden">
+<div class="center">
+<div class="badge">📱</div>
+<h2 class="big">Pass the phone</h2>
+<p id="passText">Give the phone to Player 1.</p>
+<button class="primary" onclick="showCards()">I'M READY</button>
+</div>
+</section>
+
+<!-- CARDS -->
+<section id="cards" class="screen hidden">
+<div class="top"><div class="logo">SPY</div></div>
+<h2 class="title" id="cardTitle">Player 1</h2>
+<p class="sub">Choose one mystery card. Your card disappears after you reveal it.</p>
+<div id="cardsGrid" class="cards"></div>
+</section>
+
+<!-- ROLE -->
+<section id="role" class="screen hidden">
+<div class="center">
+<div class="badge" id="roleBadge">?</div>
+<div class="panel" id="rolePanel">
+<div class="player" id="rolePlayer">PLAYER 1</div>
+<div class="role" id="roleName">CITIZEN</div>
+<div id="secretArea">
+<div class="word" id="secretWord"></div>
+<div class="clue" id="secretClue"></div>
+</div>
+</div>
+<p id="roleNote">Remember your secret information. Don't show anyone!</p>
+<button class="primary" onclick="finishReveal()">HIDE & PASS PHONE</button>
+</div>
+</section>
+
+<!-- DISCUSSION -->
+<section id="discussion" class="screen hidden">
+<div class="center">
+<div class="badge">💬</div>
+<h2 class="big">Discussion time</h2>
+<p>Ask questions, answer carefully, and watch for suspicious answers.</p>
+<div class="timer" id="timer">60</div>
+<button class="primary" onclick="startTimer()">START TIMER</button>
+<button class="secondary" onclick="startVoting()">VOTE NOW</button>
+</div>
+</section>
+
+<!-- VOTING -->
+<section id="voting" class="screen hidden">
+<div class="top"><div class="logo">SPY</div></div>
+<h2 class="title">Who is the Spy?</h2>
+<p class="sub">Everyone votes for the player they suspect.</p>
+<div id="voteList" class="vote-list"></div>
+<button class="primary" onclick="submitVote()">SUBMIT VOTE</button>
+</section>
+
+<!-- RESULT -->
+<section id="result" class="screen hidden">
+<div class="center">
+<div class="result-icon" id="resultIcon">🕵️</div>
+<div class="big" id="resultTitle"></div>
+<p id="resultText"></p>
+<div class="panel">
+<div class="player">THE SECRET WORD</div>
+<div class="word" id="resultWord"></div>
+</div>
+<button class="primary" id="guessButton" onclick="showGuess()">SPY FINAL GUESS</button>
+<button class="secondary" onclick="newRound()">PLAY AGAIN</button>
+</div>
+</section>
+
+<!-- GUESS -->
+<section id="guess" class="screen hidden">
+<div class="center">
+<div class="badge">🕵️</div>
+<h2 class="big">Final chance</h2>
+<p>The Spy was caught! Now the Spy can guess the secret word.</p>
+<input id="guessInput" placeholder="Enter your guess">
+<button class="primary" style="margin-top:15px" onclick="checkGuess()">GUESS</button>
+</div>
+</section>
+
+<!-- WINNER -->
+<section id="winner" class="screen hidden">
+<div class="center">
+<div class="result-icon" id="winnerIcon">🏆</div>
+<div class="big" id="winnerTitle"></div>
+<p id="winnerText"></p>
+<button class="primary" onclick="newRound()">PLAY AGAIN</button>
+</div>
+</section>
+
+</div>
+
+<script>
+const data={
+"Animals":[
+["Cat","A small pet animal that says meow."],
+["Tiger","A large striped wild cat found in forests."],
+["Elephant","A huge animal with a long trunk and large ears."],
+["Lion","A powerful wild cat often called the king of the jungle."],
+["Dog","A common loyal pet that often barks."],
+["Monkey","A clever animal that climbs trees and likes fruit."]
+],
+"Food & Drinks":[
+["Biryani","A flavorful rice dish cooked with spices and meat or vegetables."],
+["Pizza","A baked dish with a flat base, sauce and toppings."],
+["Samosa","A crispy snack usually filled with spiced potatoes."],
+["Dosa","A thin South Indian dish made from fermented rice batter."],
+["Mango","A sweet tropical fruit with juicy yellow or orange flesh."],
+["Pani Puri","A popular snack filled with flavored water and tasty fillings."]
+],
+"Jobs & Roles":[
+["Doctor","A person who treats people when they are sick."],
+["Teacher","A person who helps students learn new things."],
+["Chef","A person who prepares food professionally."],
+["Pilot","A person trained to fly an aircraft."],
+["Police Officer","A person who helps enforce laws and protect people."],
+["Farmer","A person who grows crops or raises animals."]
+],
+"Phone Companies":[
+["Apple","A technology company known for making iPhones and other devices."],
+["Samsung","A technology company known for smartphones and electronics."],
+["OnePlus","A smartphone brand known for making Android phones."],
+["Xiaomi","A technology brand known for smartphones and smart devices."],
+["Vivo","A smartphone company known for Android phones and cameras."],
+["Oppo","A smartphone brand known for Android devices and camera features."]
+],
+"Famous in India":[
+["Taj Mahal","A famous white marble monument built in Agra."],
+["Cricket","A hugely popular bat-and-ball sport followed across India."],
+["Diwali","A major Indian festival celebrated with lights and family gatherings."],
+["Mumbai","A major Indian city famous for films and the Gateway of India."],
+["Bollywood","India's Hindi-language film industry based mainly in Mumbai."],
+["Auto Rickshaw","A small three-wheeled vehicle commonly used for local transport."]
+],
+"Famous in Telangana":[
+["Hyderabad","A major Telangana city famous for Charminar and biryani."],
+["Charminar","A historic Hyderabad monument with four tall arches and minarets."],
+["Golconda Fort","A historic fort near Hyderabad known for its walls and architecture."],
+["Hussain Sagar","A large lake in Hyderabad with a famous Buddha statue."],
+["Bathukamma","A colorful Telangana flower festival celebrated mainly by women."],
+["Bonalu","A traditional Telangana festival involving offerings to local goddesses."],
+["Ramoji Film City","A huge film studio complex and tourist attraction near Hyderabad."],
+["Osmania Biscuit","A popular Hyderabad biscuit known for its sweet and salty taste."]
+],
+"Telangana Movies & Entertainment":[
+["Baahubali","A famous Indian epic film series with warriors, kingdoms and battles."],
+["RRR","A popular Indian action film featuring two revolutionary heroes."],
+["Pushpa","A Telugu action film centered around a sandalwood smuggler."],
+["Arjun Reddy","A Telugu romantic drama about a passionate and troubled doctor."],
+["Jersey","A sports drama about a former cricket player returning to the game."],
+["DJ Tillu","A Telugu comedy film featuring a talkative young man."]
+],
+"Indian Cricket & Sports":[
+["Virat Kohli","A famous Indian cricketer known for batting and leadership."],
+["MS Dhoni","A celebrated Indian cricketer known for wicketkeeping and captaincy."],
+["Rohit Sharma","An Indian cricketer famous for powerful batting and captaincy."],
+["Cricket Stadium","A large sports venue where major cricket matches are played."],
+["IPL","A major Indian professional cricket league featuring city-based teams."],
+["Badminton","A racket sport played with a lightweight shuttlecock."]
+],
+"Indian Festivals & Culture":[
+["Holi","A colorful festival where people celebrate by playing with colored powder."],
+["Sankranti","A harvest festival celebrated in many parts of India."],
+["Ugadi","A traditional New Year festival celebrated in parts of South India."],
+["Dussehra","A major festival associated with the victory of good over evil."],
+["Diwali","A festival of lights celebrated with lamps, sweets and family gatherings."],
+["Bathukamma","A Telangana flower festival featuring beautifully arranged flowers."]
+],
+"Indian Cities & Places":[
+["Goa","An Indian coastal destination known for beaches and tourism."],
+["Jaipur","A historic city known for forts, palaces and pink-colored buildings."],
+["Varanasi","An ancient city on the Ganges known for spiritual traditions."],
+["India Gate","A famous war memorial located in New Delhi."],
+["Red Fort","A historic red sandstone fort in Delhi."],
+["Darjeeling","A hill town known for tea gardens and mountain views."]
+],
+"Telangana Places":[
+["Charminar","A historic monument in the heart of Hyderabad."],
+["Golconda Fort","A historic fort famous for its massive walls and architecture."],
+["Tank Bund","A popular Hyderabad road beside Hussain Sagar Lake."],
+["Hussain Sagar","A Hyderabad lake known for its large Buddha statue."],
+["Ramoji Film City","A famous film studio complex and tourist attraction near Hyderabad."],
+["Nehru Zoological Park","A large zoo in Hyderabad with many animal species."]
+],
+"Telangana Food":[
+["Hyderabadi Biryani","A famous rice dish from Hyderabad cooked with aromatic spices."],
+["Osmania Biscuit","A Hyderabad biscuit known for its distinctive sweet-salty flavor."],
+["Haleem","A thick slow-cooked dish made with grains, lentils and meat."],
+["Mirchi Bajji","A popular spicy snack made by frying stuffed green chilies."],
+["Double Ka Meetha","A sweet Hyderabad dessert made from fried bread and milk."],
+["Qubani Ka Meetha","A traditional Hyderabad dessert made with dried apricots."]
+],
+"Telugu Songs & Music":[
+["Telugu Song","A song performed in the Telugu language."],
+["Folk Song","A traditional song passed through communities and generations."],
+["Film Song","A song created as part of a movie."],
+["Melody","A pleasing sequence of musical notes that forms a tune."],
+["Drum","A percussion instrument played by striking its surface."],
+["Guitar","A string instrument commonly played with fingers or a pick."]
+],
+"Temples & Famous Places":[
+["Tirupati","A famous pilgrimage city in Andhra Pradesh known for its temple."],
+["Mecca Masjid","A historic mosque located near Charminar in Hyderabad."],
+["Salar Jung Museum","A Hyderabad museum known for its large collection of art and objects."],
+["Birla Mandir","A hilltop temple in Hyderabad overlooking Hussain Sagar."],
+["Yadadri Temple","A famous Telangana temple dedicated to Lord Narasimha."],
+["Warangal Fort","A historic fort in Telangana known for its distinctive gateways."]
+],
+"Everyday Things":[
+["Laptop","A portable computer used for work, study and entertainment."],
+["Camera","A device used to capture photographs and videos."],
+["Umbrella","An object used to protect people from rain or sunlight."],
+["Bicycle","A two-wheeled vehicle powered by pedaling."],
+["Watch","A small device worn or carried to tell time."],
+["Bottle","A container commonly used for carrying liquids."]
+]
+};
+
+const categories=Object.keys(data);
+let category=categories[0],players=5,spy=-1,current=0,used=[],word="",clue="",timer=60,timerId=null,vote=-1;
+
+function show(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+}
+
+function renderCategories(){
+ const el=document.getElementById("categories");
+ el.innerHTML="";
+ categories.forEach((c,i)=>{
+  const b=document.createElement("button");
+  b.className="choice"+(c===category?" selected":"");
+  b.innerHTML=c+"<small>"+data[c].length+" topics</small>";
+  b.onclick=()=>{category=c;renderCategories()};
+  el.appendChild(b);
+ });
+}
+
+function renderNumbers(){
+ const el=document.getElementById("numbers");
+ el.innerHTML="";
+ for(let i=3;i<=12;i++){
+  const b=document.createElement("button");
+  b.className="number"+(i===players?" selected":"");
+  b.textContent=i;
+  b.onclick=()=>{players=i;renderNumbers();document.getElementById("playerCount").textContent=i};
+  el.appendChild(b);
+ }
+}
+
+function goPlayers(){renderNumbers();show("players")}
+
+function startGame(){
+ const pool=data[category];
+ const item=pool[Math.floor(Math.random()*pool.length)];
+ word=item[0];clue=item[1];
+ spy=Math.floor(Math.random()*players);
+ current=0;used=[];
+ showPass();
+}
+
+function showPass(){
+ document.getElementById("passText").textContent="Give the phone to Player "+(current+1)+".";
+ show("pass");
+}
+
+function showCards(){
+ document.getElementById("cardTitle").textContent="Player "+(current+1)+" — choose a card";
+ const grid=document.getElementById("cardsGrid");
+ grid.innerHTML="";
+ for(let i=0;i<players;i++){
+  if(used.includes(i))continue;
+  const b=document.createElement("button");
+  b.className="card";
+  b.textContent="?";
+  b.onclick=()=>pickCard(i);
+  grid.appendChild(b);
+ }
+ show("cards");
+}
+
+function pickCard(index){
+ used.push(index);
+ const isSpy=(index===spy);
+ document.getElementById("rolePlayer").textContent="PLAYER "+(current+1);
+ const panel=document.getElementById("rolePanel");
+ const area=document.getElementById("secretArea");
+ if(isSpy){
+  panel.classList.add("spybox");
+  document.getElementById("roleBadge").textContent="🕵️";
+  document.getElementById("roleName").textContent="YOU ARE THE SPY";
+  area.innerHTML="";
+  document.getElementById("roleNote").textContent="Blend in. Ask smart questions. Never reveal that you are the Spy.";
+ }else{
+  panel.classList.remove("spybox");
+  document.getElementById("roleBadge").textContent="👤";
+  document.getElementById("roleName").textContent="CITIZEN";
+  area.innerHTML='<div class="word">'+escapeHtml(word)+'</div><div class="clue">'+escapeHtml(clue)+'</div>';
+  document.getElementById("roleNote").textContent="Remember the word and clue. Don't show anyone!";
+ }
+ show("role");
+}
+
+function finishReveal(){
+ current++;
+ if(current<players)showPass();
+ else{
+  document.getElementById("timer").textContent="60";
+  show("discussion");
+ }
+}
+
+function startTimer(){
+ if(timerId)return;
+ timer=60;
+ document.getElementById("timer").textContent=timer;
+ timerId=setInterval(()=>{
+  timer--;
+  document.getElementById("timer").textContent=timer;
+  if(timer<=0){
+   clearInterval(timerId);timerId=null;startVoting();
+  }
+ },1000);
+}
+
+function startVoting(){
+ if(timerId){clearInterval(timerId);timerId=null}
+ vote=-1;
+ const el=document.getElementById("voteList");
+ el.innerHTML="";
+ for(let i=0;i<players;i++){
+  const b=document.createElement("button");
+  b.className="vote";
+  b.textContent="Player "+(i+1);
+  b.onclick=()=>{
+   vote=i;
+   [...el.children].forEach(x=>x.classList.remove("selected"));
+   b.classList.add("selected");
+  };
+  el.appendChild(b);
+ }
+ show("voting");
+}
+
+function submitVote(){
+ if(vote<0){alert("Choose a player first.");return}
+ const caught=(vote===spy);
+ document.getElementById("resultWord").textContent=word;
+ if(caught){
+  document.getElementById("resultIcon").textContent="🕵️";
+  document.getElementById("resultTitle").textContent="THE SPY WAS CAUGHT!";
+  document.getElementById("resultText").textContent="Player "+(spy+1)+" was the Spy. But the Spy gets one final chance!";
+  document.getElementById("guessButton").classList.remove("hidden");
+ }else{
+  document.getElementById("resultIcon").textContent="😈";
+  document.getElementById("resultTitle").textContent="THE SPY ESCAPED!";
+  document.getElementById("resultText").textContent="The group
