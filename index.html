@@ -448,4 +448,66 @@ function submitVote(){
  }else{
   document.getElementById("resultIcon").textContent="😈";
   document.getElementById("resultTitle").textContent="THE SPY ESCAPED!";
-  document.getElementById("resultText").textContent="The group
+  document.getElementById("resultText").textContent="The group did not catch the Spy.";
+document.getElementById("guessButton").classList.add("hidden");
+}
+show("result");
+}
+
+function showGuess(){
+show("guess");
+}
+
+function checkGuess(){
+const guess=document.getElementById("guessInput").value.trim().toLowerCase();
+
+if(!guess){
+alert("Enter your guess first.");
+return;
+}
+
+if(guess===word.toLowerCase()){
+document.getElementById("winnerIcon").textContent="🕵️";
+document.getElementById("winnerTitle").textContent="THE SPY WINS!";
+document.getElementById("winnerText").textContent="The Spy guessed the secret word correctly!";
+}else{
+document.getElementById("winnerIcon").textContent="🏆";
+document.getElementById("winnerTitle").textContent="CITIZENS WIN!";
+document.getElementById("winnerText").textContent="The Spy guessed incorrectly. The citizens win!";
+}
+
+show("winner");
+}
+
+function newRound(){
+if(timerId){
+clearInterval(timerId);
+timerId=null;
+}
+
+spy=-1;
+current=0;
+used=[];
+vote=-1;
+timer=60;
+document.getElementById("guessInput").value="";
+renderCategories();
+renderNumbers();
+show("category");
+}
+
+function escapeHtml(s){
+return String(s)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
+
+renderCategories();
+renderNumbers();
+</script>
+
+</body>
+</html>
