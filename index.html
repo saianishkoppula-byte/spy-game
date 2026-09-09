@@ -3,510 +3,2374 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
 <title>SPY — Party Game</title>
+
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#651bc0;color:#fff;font-family:Arial,sans-serif}
-.app{min-height:100vh;min-height:100dvh;padding:22px 18px 30px;background:radial-gradient(circle at 10% 10%,#8d3be0,transparent 30%),linear-gradient(145deg,#7627d1,#5010a5)}
-.screen{max-width:520px;min-height:calc(100vh - 52px);margin:auto;display:flex;flex-direction:column}
-.hidden{display:none!important}
-.logo{font-size:30px;font-weight:1000;letter-spacing:-2px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
-.menu{width:44px;height:44px;border-radius:50%;background:#ffffff18;color:#fff;border:1px solid #ffffff30;font-size:22px}
-.hero{text-align:center;margin:auto 0}
-.hero h1{font-size:82px;line-height:.85;margin:0;font-weight:1000;letter-spacing:-7px}
-.hero p{color:#ffffffb5;line-height:1.5;font-size:17px;margin:25px auto;max-width:380px}
-.primary{width:100%;min-height:60px;border:0;border-radius:32px;background:#ffda2f;color:#35106d;font-size:19px;font-weight:900;box-shadow:0 6px #3f087e55}
-.primary:active{transform:translateY(3px);box-shadow:0 3px #3f087e55}
-.secondary{width:100%;min-height:56px;border-radius:30px;background:#ffffff12;color:#fff;border:2px solid #ffffff2e;font-weight:800;margin-top:12px}
-.title{font-size:35px;font-weight:1000;letter-spacing:-2px;margin:8px 0}
-.sub{color:#ffffffad;line-height:1.45;margin-top:0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
-.choice{min-height:86px;padding:15px;border-radius:22px;background:#ffffff10;color:#fff;border:2px solid #ffffff26;text-align:left;font-weight:900;font-size:16px}
-.choice small{display:block;color:#ffffff88;margin-top:5px;font-weight:600}
-.choice.selected{background:#ffda2f;color:#35106d;border-color:#ffda2f}
-.numbers{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
-.number{height:58px;border-radius:19px;background:#ffffff12;color:#fff;border:2px solid #ffffff26;font-weight:900;font-size:18px}
-.number.selected{background:#ffda2f;color:#35106d;border-color:#ffda2f}
-.center{margin:auto 0;text-align:center}
-.badge{width:95px;height:95px;margin:auto;border-radius:30px;background:#ffda2f;color:#35106d;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:1000;box-shadow:0 7px #3f087e55}
-.panel{padding:25px;border-radius:28px;background:#ffffff10;border:2px solid #ffffff22;margin:18px 0}
-.player{font-size:15px;color:#ffffff9e;font-weight:800}
-.role{font-size:43px;font-weight:1000;margin:8px 0}
-.word{font-size:48px;font-weight:1000;line-height:1;margin:10px 0;letter-spacing:-2px}
-.clue{color:#fffbd1;font-size:17px;line-height:1.45}
-.spybox{background:#d82b78!important;border-color:#ff7cac!important}
-.spybox .role{font-size:48px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:25px 0}
-.card{aspect-ratio:1/1.25;border-radius:24px;background:linear-gradient(145deg,#9c4be7,#6320bd);border:3px solid #ffffff65;color:#fff;font-size:42px;font-weight:1000;box-shadow:0 7px 0 #3d087955}
-.card:active{transform:scale(.96)}
-.timer{font-size:76px;font-weight:1000;margin:15px 0}
-.vote-list{display:grid;gap:10px;margin:20px 0}
-.vote{min-height:58px;padding:15px 18px;border-radius:20px;background:#ffffff12;color:#fff;border:2px solid #ffffff26;text-align:left;font-weight:900}
-.vote.selected{background:#ffda2f;color:#35106d}
-.result-icon{font-size:80px;margin-bottom:10px}
-.big{font-size:40px;font-weight:1000;line-height:1.05;letter-spacing:-2px}
-.footer{margin-top:auto;padding-top:20px;text-align:center;color:#ffffff66;font-size:12px}
-input{width:100%;padding:16px;border-radius:18px;border:2px solid #ffffff25;background:#ffffff10;color:#fff;font-size:18px;outline:0}
-input::placeholder{color:#ffffff70}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:#090a0b;
+}
+
+body{
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+button,
+input{
+  font-family:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  min-height:100vh;
+  min-height:100dvh;
+  padding:18px 16px 28px;
+  background:
+    radial-gradient(circle at 50% -10%,#24262a 0%,transparent 42%),
+    radial-gradient(circle at 100% 100%,#17191c 0%,transparent 35%),
+    #090a0b;
+}
+
+.screen{
+  width:100%;
+  max-width:520px;
+  min-height:calc(100vh - 46px);
+  min-height:calc(100dvh - 46px);
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
+
+.logo{
+  font-size:29px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:-2px;
+  color:#fff;
+}
+
+.logo span{
+  color:#ffd400;
+}
+
+.menu{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid #ffffff18;
+  background:#151719;
+  color:#fff;
+  font-size:20px;
+}
+
+/* =========================
+   HOME
+========================= */
+
+.hero{
+  text-align:center;
+  margin:auto 0;
+}
+
+.spy-mark{
+  width:92px;
+  height:92px;
+  margin:0 auto 20px;
+  border-radius:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#ffd400;
+  color:#090a0b;
+  font-size:47px;
+  box-shadow:
+    0 0 35px #ffd40028,
+    0 8px 0 #00000080;
+}
+
+.hero h1{
+  margin:0;
+  color:#fff;
+  font-size:88px;
+  line-height:.82;
+  font-weight:1000;
+  letter-spacing:-9px;
+}
+
+.hero .tagline{
+  margin:20px 0 0;
+  color:#ffd400;
+  font-size:20px;
+  font-weight:900;
+}
+
+.hero p{
+  max-width:390px;
+  margin:15px auto 28px;
+  color:#a8aaae;
+  font-size:16px;
+  line-height:1.55;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary{
+  width:100%;
+  min-height:60px;
+  padding:12px 20px;
+  border:0;
+  border-radius:18px;
+  background:#ffd400;
+  color:#101010;
+  font-size:18px;
+  font-weight:1000;
+  box-shadow:0 6px 0 #806b00;
+  transition:.15s;
+}
+
+.primary:active{
+  transform:translateY(3px);
+  box-shadow:0 3px 0 #806b00;
+}
+
+.secondary{
+  width:100%;
+  min-height:56px;
+  margin-top:12px;
+  padding:12px 20px;
+  border-radius:18px;
+  border:1px solid #ffffff20;
+  background:#151719;
+  color:#fff;
+  font-size:16px;
+  font-weight:900;
+}
+
+.secondary:active{
+  background:#202225;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.title{
+  margin:6px 0 8px;
+  color:#fff;
+  font-size:34px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:-2px;
+}
+
+.sub{
+  margin:0;
+  color:#96999d;
+  font-size:15px;
+  line-height:1.5;
+}
+
+/* =========================
+   CATEGORY
+========================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:20px 0;
+  max-height:60vh;
+  overflow-y:auto;
+  padding:2px;
+}
+
+.choice{
+  min-height:78px;
+  padding:14px;
+  border-radius:18px;
+  border:1px solid #ffffff14;
+  background:#151719;
+  color:#fff;
+  text-align:left;
+  font-size:15px;
+  font-weight:900;
+  transition:.15s;
+}
+
+.choice:active{
+  transform:scale(.97);
+}
+
+.choice.selected{
+  border:2px solid #ffd400;
+  background:#211f12;
+  color:#ffd400;
+}
+
+/* =========================
+   PLAYER COUNT
+========================= */
+
+.numbers{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin:22px 0;
+}
+
+.number{
+  height:58px;
+  border-radius:16px;
+  border:1px solid #ffffff16;
+  background:#151719;
+  color:#fff;
+  font-size:18px;
+  font-weight:1000;
+}
+
+.number.selected{
+  border:2px solid #ffd400;
+  background:#ffd400;
+  color:#111;
+}
+
+.panel{
+  margin:18px 0;
+  padding:22px;
+  border-radius:22px;
+  border:1px solid #ffffff14;
+  background:#111315;
+}
+
+.player{
+  color:#777b80;
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:1.5px;
+}
+
+.big{
+  margin-top:7px;
+  color:#fff;
+  font-size:39px;
+  line-height:1.05;
+  font-weight:1000;
+  letter-spacing:-2px;
+}
+
+/* =========================
+   PASS PHONE
+========================= */
+
+.center{
+  width:100%;
+  margin:auto 0;
+  text-align:center;
+}
+
+.badge{
+  width:100px;
+  height:100px;
+  margin:0 auto 22px;
+  border-radius:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#ffd400;
+  color:#111;
+  font-size:45px;
+  box-shadow:0 8px 0 #806b00;
+}
+
+.center h2{
+  margin:0;
+}
+
+.center p{
+  color:#9b9da1;
+  line-height:1.5;
+}
+
+/* =========================
+   WARNING
+========================= */
+
+.warning{
+  margin:15px 0;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid #ffffff12;
+  background:#111315;
+  color:#9da0a4;
+  font-size:13px;
+  line-height:1.4;
+}
+
+/* =========================
+   MYSTERY CARDS
+========================= */
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:24px 0;
+}
+
+.card{
+  aspect-ratio:1/1.18;
+  border-radius:22px;
+  border:2px solid #ffd40055;
+  background:
+    radial-gradient(circle at 50% 35%,#35372f 0%,transparent 32%),
+    linear-gradient(145deg,#1d1f20,#0d0e0f);
+  color:#ffd400;
+  font-size:45px;
+  font-weight:1000;
+  box-shadow:0 7px 0 #00000090;
+  transition:.15s;
+}
+
+.card:active{
+  transform:scale(.94) rotate(-2deg);
+}
+
+/* =========================
+   ROLE
+========================= */
+
+.role{
+  margin:8px 0;
+  color:#fff;
+  font-size:41px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:-2px;
+}
+
+.word{
+  margin:13px 0;
+  color:#ffd400;
+  font-size:43px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:-2px;
+}
+
+.clue{
+  color:#d6d7d8;
+  font-size:16px;
+  line-height:1.5;
+}
+
+.spybox{
+  border:2px solid #d82b55!important;
+  background:
+    radial-gradient(circle at 50% 0%,#5b1728,transparent 60%),
+    #171012!important;
+  box-shadow:0 0 35px #d82b5520;
+}
+
+.spybox .role{
+  color:#ff456d;
+}
+
+.spybox .badge{
+  background:#e32955;
+  color:#fff;
+}
+
+/* =========================
+   DISCUSSION
+========================= */
+
+.timer{
+  margin:18px 0;
+  color:#ffd400;
+  font-size:78px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:-5px;
+}
+
+/* =========================
+   VOTING
+========================= */
+
+.vote-list{
+  display:grid;
+  gap:10px;
+  margin:22px 0;
+  max-height:58vh;
+  overflow-y:auto;
+}
+
+.vote{
+  min-height:58px;
+  padding:15px 18px;
+  border-radius:17px;
+  border:1px solid #ffffff15;
+  background:#151719;
+  color:#fff;
+  text-align:left;
+  font-size:16px;
+  font-weight:900;
+}
+
+.vote.selected{
+  border:2px solid #ffd400;
+  background:#211f12;
+  color:#ffd400;
+}
+
+/* =========================
+   RESULTS
+========================= */
+
+.result-icon{
+  margin-bottom:15px;
+  font-size:76px;
+}
+
+.result-word{
+  color:#ffd400;
+}
+
+.success{
+  color:#ffd400!important;
+}
+
+.danger{
+  color:#ff456d!important;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+input{
+  width:100%;
+  min-height:58px;
+  padding:16px;
+  border-radius:17px;
+  border:1px solid #ffffff20;
+  background:#111315;
+  color:#fff;
+  outline:none;
+  font-size:17px;
+}
+
+input:focus{
+  border-color:#ffd400;
+}
+
+input::placeholder{
+  color:#676a6e;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+  margin-top:auto;
+  padding-top:20px;
+  color:#55585c;
+  text-align:center;
+  font-size:11px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:380px){
+
+  .hero h1{
+    font-size:72px;
+  }
+
+  .spy-mark{
+    width:82px;
+    height:82px;
+    font-size:40px;
+  }
+
+  .title{
+    font-size:30px;
+  }
+
+  .choice{
+    font-size:14px;
+    min-height:72px;
+  }
+
+  .word{
+    font-size:36px;
+  }
+
+}
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
-<!-- HOME -->
+
+<!-- =====================================================
+     HOME
+===================================================== -->
+
 <section id="home" class="screen">
-<div class="top"><div class="logo">SPY</div><button class="menu" onclick="alert('SPY Party Game')">☰</button></div>
-<div class="hero">
-<h1>SPY</h1>
-<p>A secret word. One hidden Spy. Ask clever questions, find the Spy, and survive the vote.</p>
-<button class="primary" onclick="document.getElementById('home').classList.add('hidden');document.getElementById('category').classList.remove('hidden')">START GAME</button>
-</div>
-<div class="footer">Pass the phone • Play together • Find the Spy</div>
+
+  <div class="top">
+
+    <div class="logo">
+      SPY<span>.</span>
+    </div>
+
+    <button
+      class="menu"
+      onclick="alert('SPY — One word. One Spy. Can you find them?')"
+    >
+      ☰
+    </button>
+
+  </div>
+
+
+  <div class="hero">
+
+    <div class="spy-mark">
+      🕵️
+    </div>
+
+    <h1>SPY</h1>
+
+    <div class="tagline">
+      ONE WORD. ONE SPY.
+    </div>
+
+    <p>
+      Ask clever questions. Answer carefully.
+      Find the hidden Spy before the vote.
+    </p>
+
+    <button
+      class="primary"
+      onclick="goCategory()"
+    >
+      START GAME
+    </button>
+
+  </div>
+
+
+  <div class="footer">
+    PASS THE PHONE • PLAY TOGETHER • FIND THE SPY
+  </div>
+
 </section>
 
-<!-- CATEGORY -->
+
+
+<!-- =====================================================
+     CATEGORY
+===================================================== -->
+
 <section id="category" class="screen hidden">
-<div class="top"><div class="logo">SPY</div></div>
-<h2 class="title">Choose a category</h2>
-<p class="sub">Pick what everyone will secretly know.</p>
-<div id="categories" class="grid"></div>
-<button class="primary" onclick="goPlayers()">CONTINUE</button>
-<button class="secondary" onclick="show('home')">BACK</button>
+
+  <div class="top">
+
+    <div class="logo">
+      SPY<span>.</span>
+    </div>
+
+  </div>
+
+  <h2 class="title">
+    Choose a category
+  </h2>
+
+  <p class="sub">
+    Everyone knows the secret word except the Spy.
+  </p>
+
+  <div
+    id="categories"
+    class="grid"
+  ></div>
+
+  <button
+    class="primary"
+    onclick="goPlayers()"
+  >
+    CONTINUE
+  </button>
+
+  <button
+    class="secondary"
+    onclick="show('home')"
+  >
+    BACK
+  </button>
+
 </section>
 
-<!-- PLAYERS -->
+
+
+<!-- =====================================================
+     PLAYERS
+===================================================== -->
+
 <section id="players" class="screen hidden">
-<div class="top"><div class="logo">SPY</div></div>
-<h2 class="title">How many players?</h2>
-<p class="sub">Choose between 3 and 12 players.</p>
-<div id="numbers" class="numbers"></div>
-<div class="panel">
-<div class="player">SELECTED PLAYERS</div>
-<div id="playerCount" class="big">5</div>
-</div>
-<button class="primary" onclick="startGame()">CREATE ROUND</button>
-<button class="secondary" onclick="show('category')">BACK</button>
+
+  <div class="top">
+
+    <div class="logo">
+      SPY<span>.</span>
+    </div>
+
+  </div>
+
+  <h2 class="title">
+    Players
+  </h2>
+
+  <p class="sub">
+    Choose between 3 and 12 players.
+  </p>
+
+  <div
+    id="numbers"
+    class="numbers"
+  ></div>
+
+  <div class="panel">
+
+    <div class="player">
+      SELECTED PLAYERS
+    </div>
+
+    <div
+      id="playerCount"
+      class="big"
+    >
+      5
+    </div>
+
+  </div>
+
+  <button
+    class="primary"
+    onclick="startGame()"
+  >
+    CREATE ROUND
+  </button>
+
+  <button
+    class="secondary"
+    onclick="show('category')"
+  >
+    BACK
+  </button>
+
 </section>
 
-<!-- PASS -->
+
+
+<!-- =====================================================
+     PASS
+===================================================== -->
+
 <section id="pass" class="screen hidden">
-<div class="center">
-<div class="badge">📱</div>
-<h2 class="big">Pass the phone</h2>
-<p id="passText">Give the phone to Player 1.</p>
-<button class="primary" onclick="showCards()">I'M READY</button>
-</div>
+
+  <div class="center">
+
+    <div class="badge">
+      📱
+    </div>
+
+    <h2 class="big">
+      Pass the phone
+    </h2>
+
+    <p id="passText">
+      Give the phone to Player 1.
+    </p>
+
+    <div class="warning">
+      🔒 Only the current player should look at the screen.
+    </div>
+
+    <button
+      class="primary"
+      style="margin-top:16px"
+      onclick="showCards()"
+    >
+      I'M READY
+    </button>
+
+  </div>
+
 </section>
 
-<!-- CARDS -->
+
+
+<!-- =====================================================
+     CARDS
+===================================================== -->
+
 <section id="cards" class="screen hidden">
-<div class="top"><div class="logo">SPY</div></div>
-<h2 class="title" id="cardTitle">Player 1</h2>
-<p class="sub">Choose one mystery card. Your card disappears after you reveal it.</p>
-<div id="cardsGrid" class="cards"></div>
+
+  <div class="top">
+
+    <div class="logo">
+      SPY<span>.</span>
+    </div>
+
+  </div>
+
+  <h2
+    class="title"
+    id="cardTitle"
+  >
+    Player 1
+  </h2>
+
+  <p class="sub">
+    Choose ONE mystery card.
+    Your card disappears after selection.
+  </p>
+
+  <div class="warning">
+    ⚠️ Make sure nobody else can see your screen.
+  </div>
+
+  <div
+    id="cardsGrid"
+    class="cards"
+  ></div>
+
 </section>
 
-<!-- ROLE -->
+
+
+<!-- =====================================================
+     ROLE
+===================================================== -->
+
 <section id="role" class="screen hidden">
-<div class="center">
-<div class="badge" id="roleBadge">?</div>
-<div class="panel" id="rolePanel">
-<div class="player" id="rolePlayer">PLAYER 1</div>
-<div class="role" id="roleName">CITIZEN</div>
-<div id="secretArea">
-<div class="word" id="secretWord"></div>
-<div class="clue" id="secretClue"></div>
-</div>
-</div>
-<p id="roleNote">Remember your secret information. Don't show anyone!</p>
-<button class="primary" onclick="finishReveal()">HIDE & PASS PHONE</button>
-</div>
+
+  <div class="center">
+
+    <div
+      class="badge"
+      id="roleBadge"
+    >
+      ?
+    </div>
+
+    <div
+      class="panel"
+      id="rolePanel"
+    >
+
+      <div
+        class="player"
+        id="rolePlayer"
+      >
+        PLAYER 1
+      </div>
+
+      <div
+        class="role"
+        id="roleName"
+      >
+        CITIZEN
+      </div>
+
+      <div id="secretArea">
+
+        <div
+          class="word"
+          id="secretWord"
+        ></div>
+
+        <div
+          class="clue"
+          id="secretClue"
+        ></div>
+
+      </div>
+
+    </div>
+
+    <div class="warning">
+      🔒 SECRET — Don't show this screen to anyone.
+    </div>
+
+    <p
+      id="roleNote"
+      class="small-note"
+    >
+      Remember your secret information.
+    </p>
+
+    <button
+      class="primary"
+      onclick="finishReveal()"
+    >
+      HIDE & PASS PHONE
+    </button>
+
+  </div>
+
 </section>
 
-<!-- DISCUSSION -->
+
+
+<!-- =====================================================
+     DISCUSSION
+===================================================== -->
+
 <section id="discussion" class="screen hidden">
-<div class="center">
-<div class="badge">💬</div>
-<h2 class="big">Discussion time</h2>
-<p>Ask questions, answer carefully, and watch for suspicious answers.</p>
-<div class="timer" id="timer">60</div>
-<button class="primary" onclick="startTimer()">START TIMER</button>
-<button class="secondary" onclick="startVoting()">VOTE NOW</button>
-</div>
+
+  <div class="center">
+
+    <div class="badge">
+      💬
+    </div>
+
+    <h2 class="big">
+      Discussion time
+    </h2>
+
+    <p>
+      Ask questions. Answer carefully.
+      Watch for suspicious answers.
+    </p>
+
+    <div
+      class="timer"
+      id="timer"
+    >
+      60
+    </div>
+
+    <button
+      class="primary"
+      onclick="startTimer()"
+    >
+      START TIMER
+    </button>
+
+    <button
+      class="secondary"
+      onclick="startVoting()"
+    >
+      VOTE NOW
+    </button>
+
+  </div>
+
 </section>
 
-<!-- VOTING -->
+
+
+<!-- =====================================================
+     VOTING
+===================================================== -->
+
 <section id="voting" class="screen hidden">
-<div class="top"><div class="logo">SPY</div></div>
-<h2 class="title">Who is the Spy?</h2>
-<p class="sub">Everyone votes for the player they suspect.</p>
-<div id="voteList" class="vote-list"></div>
-<button class="primary" onclick="submitVote()">SUBMIT VOTE</button>
+
+  <div class="top">
+
+    <div class="logo">
+      SPY<span>.</span>
+    </div>
+
+  </div>
+
+  <h2 class="title">
+    Final Vote
+  </h2>
+
+  <p class="sub">
+    Who do you think is the Spy?
+  </p>
+
+  <div
+    id="voteList"
+    class="vote-list"
+  ></div>
+
+  <button
+    class="primary"
+    onclick="submitVote()"
+  >
+    SUBMIT VOTE
+  </button>
+
 </section>
 
-<!-- RESULT -->
+
+
+<!-- =====================================================
+     RESULT
+===================================================== -->
+
 <section id="result" class="screen hidden">
-<div class="center">
-<div class="result-icon" id="resultIcon">🕵️</div>
-<div class="big" id="resultTitle"></div>
-<p id="resultText"></p>
-<div class="panel">
-<div class="player">THE SECRET WORD</div>
-<div class="word" id="resultWord"></div>
-</div>
-<button class="primary" id="guessButton" onclick="showGuess()">SPY FINAL GUESS</button>
-<button class="secondary" onclick="newRound()">PLAY AGAIN</button>
-</div>
+
+  <div class="center">
+
+    <div
+      class="result-icon"
+      id="resultIcon"
+    >
+      🕵️
+    </div>
+
+    <div
+      class="big"
+      id="resultTitle"
+    ></div>
+
+    <p id="resultText"></p>
+
+    <div class="panel">
+
+      <div class="player">
+        THE SECRET WORD
+      </div>
+
+      <div
+        class="word result-word"
+        id="resultWord"
+      ></div>
+
+    </div>
+
+    <button
+      class="primary"
+      id="guessButton"
+      onclick="showGuess()"
+    >
+      SPY FINAL GUESS
+    </button>
+
+    <button
+      class="secondary"
+      onclick="newRound()"
+    >
+      PLAY AGAIN
+    </button>
+
+  </div>
+
 </section>
 
-<!-- GUESS -->
+
+
+<!-- =====================================================
+     GUESS
+===================================================== -->
+
 <section id="guess" class="screen hidden">
-<div class="center">
-<div class="badge">🕵️</div>
-<h2 class="big">Final chance</h2>
-<p>The Spy was caught! Now the Spy can guess the secret word.</p>
-<input id="guessInput" placeholder="Enter your guess">
-<button class="primary" style="margin-top:15px" onclick="checkGuess()">GUESS</button>
-</div>
+
+  <div class="center">
+
+    <div class="badge">
+      🕵️
+    </div>
+
+    <h2 class="big">
+      One last chance
+    </h2>
+
+    <p>
+      You were caught!
+      Guess the secret word to steal the win.
+    </p>
+
+    <input
+      id="guessInput"
+      placeholder="Enter your guess"
+      autocomplete="off"
+    >
+
+    <button
+      class="primary"
+      style="margin-top:15px"
+      onclick="checkGuess()"
+    >
+      GUESS
+    </button>
+
+  </div>
+
 </section>
 
-<!-- WINNER -->
+
+
+<!-- =====================================================
+     WINNER
+===================================================== -->
+
 <section id="winner" class="screen hidden">
-<div class="center">
-<div class="result-icon" id="winnerIcon">🏆</div>
-<div class="big" id="winnerTitle"></div>
-<p id="winnerText"></p>
-<button class="primary" onclick="newRound()">PLAY AGAIN</button>
-</div>
+
+  <div class="center">
+
+    <div
+      class="result-icon"
+      id="winnerIcon"
+    >
+      🏆
+    </div>
+
+    <div
+      class="big"
+      id="winnerTitle"
+    ></div>
+
+    <p id="winnerText"></p>
+
+    <button
+      class="primary"
+      onclick="newRound()"
+    >
+      PLAY AGAIN
+    </button>
+
+  </div>
+
 </section>
 
 </div>
+
+
 
 <script>
-const data={
+
+/* =========================================================
+   WORD DATABASE
+========================================================= */
+
+const data = {
+
+
+/* =========================================================
+   ANIMALS
+========================================================= */
+
 "Animals":[
-["Cat","A small pet animal that says meow."],
-["Tiger","A large striped wild cat found in forests."],
-["Elephant","A huge animal with a long trunk and large ears."],
-["Lion","A powerful wild cat often called the king of the jungle."],
-["Dog","A common loyal pet that often barks."],
-["Monkey","A clever animal that climbs trees and likes fruit."]
+
+["Cat","A common small pet animal known for being independent and playful."],
+["Dog","A loyal domesticated animal commonly kept as a companion."],
+["Tiger","A large striped wild cat found across parts of Asia."],
+["Lion","A large wild cat famous for its mane and social groups."],
+["Elephant","A huge land animal known for its trunk and large ears."],
+["Monkey","A clever primate commonly associated with trees and tropical forests."],
+["Horse","A large domesticated animal commonly used for riding."],
+["Cow","A farm animal commonly raised for milk and agriculture."],
+["Goat","A small farm animal known for eating plants and climbing."],
+["Sheep","A farm animal raised mainly for wool and meat."],
+["Rabbit","A small long-eared animal often kept as a pet."],
+["Deer","A hoofed animal commonly found in forests and grasslands."],
+["Giraffe","A very tall animal famous for its extremely long neck."],
+["Zebra","A horse-like African animal famous for black and white stripes."],
+["Bear","A large mammal found in forests and cold regions."],
+["Wolf","A wild canine that commonly lives and hunts in groups."],
+["Fox","A small wild canine known for its pointed face and bushy tail."],
+["Peacock","A colorful bird famous for its large decorative tail feathers."],
+["Parrot","A colorful bird known for copying sounds and human speech."],
+["Dolphin","A highly intelligent marine mammal known for swimming in groups."],
+["Shark","A large ocean predator with sharp teeth."],
+["Penguin","A flightless seabird commonly associated with cold regions."],
+["Kangaroo","An Australian animal known for hopping and carrying young in a pouch."],
+["Crocodile","A large reptile that lives near rivers, lakes and wetlands."],
+["Snake","A legless reptile that moves by slithering."],
+["Eagle","A large bird of prey known for powerful flight."],
+["Owl","A bird known for its large eyes and nighttime activity."],
+["Butterfly","An insect with colorful wings that develops from a caterpillar."],
+["Bee","A flying insect important for pollination and honey production."],
+["Ant","A small social insect commonly living in organized colonies."]
+
 ],
+
+
+/* =========================================================
+   FOOD
+========================================================= */
+
 "Food & Drinks":[
+
 ["Biryani","A flavorful rice dish cooked with spices and meat or vegetables."],
 ["Pizza","A baked dish with a flat base, sauce and toppings."],
-["Samosa","A crispy snack usually filled with spiced potatoes."],
-["Dosa","A thin South Indian dish made from fermented rice batter."],
+["Samosa","A crispy snack commonly filled with spiced potatoes."],
+["Dosa","A thin South Indian dish made from fermented rice and lentils."],
+["Idli","A soft steamed South Indian breakfast made from fermented batter."],
+["Vada","A savory fried South Indian snack with a crisp outside."],
 ["Mango","A sweet tropical fruit with juicy yellow or orange flesh."],
-["Pani Puri","A popular snack filled with flavored water and tasty fillings."]
+["Pani Puri","A popular snack filled with flavored water and tasty fillings."],
+["Gulab Jamun","A soft sweet made from fried milk-based dough soaked in syrup."],
+["Jalebi","A spiral-shaped sweet soaked in sugar syrup."],
+["Haleem","A thick slow-cooked dish made with grains, lentils and meat."],
+["Butter Chicken","A popular Indian chicken dish with a creamy tomato-based sauce."],
+["Paneer","A fresh Indian cheese commonly used in vegetarian dishes."],
+["Noodles","Long thin strands commonly cooked with vegetables and sauces."],
+["Burger","A sandwich usually containing a patty inside a bun."],
+["Sandwich","Food made by placing fillings between slices of bread."],
+["Tea","A popular drink made by infusing tea leaves in hot water."],
+["Coffee","A drink prepared from roasted coffee beans."],
+["Lassi","A traditional yogurt-based drink popular in India."],
+["Ice Cream","A frozen sweet dessert made from milk or cream."],
+["Chocolate","A sweet food made mainly from processed cocoa."],
+["Pulao","A rice dish cooked with spices, vegetables or meat."],
+["Paratha","A layered Indian flatbread commonly served with savory accompaniments."],
+["Chole Bhature","A popular North Indian combination of spicy chickpeas and fried bread."],
+["Poha","A breakfast dish made from flattened rice."],
+["Upma","A savory breakfast dish usually made from semolina."],
+["Rasam","A thin South Indian soup-like dish with spices and tamarind."],
+["Curd Rice","A simple rice dish mixed with yogurt and seasonings."],
+["Pakora","A fried snack made by coating ingredients in spiced batter."],
+["Kheer","A traditional Indian sweet pudding commonly made with milk and rice."]
+
 ],
+
+
+/* =========================================================
+   JOBS & ROLES
+========================================================= */
+
 "Jobs & Roles":[
-["Doctor","A person who treats people when they are sick."],
-["Teacher","A person who helps students learn new things."],
-["Chef","A person who prepares food professionally."],
+
+["Doctor","A medical professional who diagnoses and treats illness."],
+["Teacher","A person who helps students learn and develop knowledge."],
+["Engineer","A professional who designs or builds systems, machines or structures."],
+["Chef","A professional who prepares food."],
 ["Pilot","A person trained to fly an aircraft."],
-["Police Officer","A person who helps enforce laws and protect people."],
-["Farmer","A person who grows crops or raises animals."]
+["Police Officer","A person responsible for enforcing laws and protecting people."],
+["Farmer","A person who grows crops or raises animals."],
+["Lawyer","A professional who provides legal advice and representation."],
+["Judge","A person who presides over legal proceedings."],
+["Scientist","A person who studies the natural world through research."],
+["Actor","A person who performs characters in films or theatre."],
+["Singer","A person who performs songs using their voice."],
+["Dancer","A person who performs dance."],
+["Journalist","A person who researches and reports news and information."],
+["Photographer","A person who creates photographs professionally or creatively."],
+["Firefighter","A person trained to put out fires and rescue people."],
+["Nurse","A healthcare professional who cares for patients."],
+["Driver","A person who operates a vehicle."],
+["Architect","A professional who designs buildings and structures."],
+["Soldier","A member of a military force."],
+["Entrepreneur","A person who starts or develops a business."],
+["Programmer","A person who writes and develops computer software."],
+["Dentist","A medical professional who treats teeth and oral health."],
+["Mechanic","A person who repairs and maintains machines or vehicles."],
+["Manager","A person responsible for organizing people or business activities."],
+["Designer","A person who creates plans or visual concepts."],
+["Artist","A person who creates art."],
+["Electrician","A person who installs and repairs electrical systems."],
+["Plumber","A person who installs and repairs water and pipe systems."]
+
 ],
+
+
+/* =========================================================
+   PHONE COMPANIES
+========================================================= */
+
 "Phone Companies":[
-["Apple","A technology company known for making iPhones and other devices."],
-["Samsung","A technology company known for smartphones and electronics."],
-["OnePlus","A smartphone brand known for making Android phones."],
-["Xiaomi","A technology brand known for smartphones and smart devices."],
-["Vivo","A smartphone company known for Android phones and cameras."],
-["Oppo","A smartphone brand known for Android devices and camera features."]
+
+["Apple","A technology company known for the iPhone."],
+["Samsung","A South Korean technology company known for Galaxy smartphones."],
+["OnePlus","A smartphone brand known for Android phones and fast charging."],
+["Xiaomi","A technology company known for smartphones and smart devices."],
+["Vivo","A smartphone company known for Android phones and camera features."],
+["Oppo","A smartphone brand known for Android phones and camera technology."],
+["Google Pixel","Google's smartphone line running Android."],
+["Realme","A smartphone brand known for affordable Android devices."],
+["Motorola","A historic mobile phone brand known for smartphones and feature phones."],
+["Nokia","A historic mobile phone company known for durable phones."],
+["Nothing","A technology company known for distinctive smartphone designs."],
+["Honor","A smartphone brand offering Android devices."],
+["Huawei","A technology company known for telecommunications and smartphones."],
+["Sony Xperia","Sony's smartphone product line."],
+["Asus","A technology company that also produces smartphones and gaming devices."],
+["Lenovo","A technology company that produces computers, tablets and smartphones."],
+["Tecno","A smartphone brand known for affordable Android devices."],
+["Infinix","A smartphone brand focused on affordable mobile devices."],
+["iQOO","A smartphone brand known for performance-oriented Android phones."],
+["Lava","An Indian mobile phone brand."],
+["Micromax","An Indian electronics company known for mobile phones."],
+["HTC","A technology company historically known for smartphones."],
+["BlackBerry","A historic smartphone brand known for physical keyboards and messaging."],
+["LG","A technology company that previously produced many smartphone models."]
+
 ],
+
+
+/* =========================================================
+   FAMOUS IN INDIA
+========================================================= */
+
 "Famous in India":[
-["Taj Mahal","A famous white marble monument built in Agra."],
-["Cricket","A hugely popular bat-and-ball sport followed across India."],
-["Diwali","A major Indian festival celebrated with lights and family gatherings."],
+
+["Taj Mahal","A famous white marble monument in Agra."],
+["Cricket","A hugely popular bat-and-ball sport in India."],
+["Diwali","A major Indian festival associated with lights and celebrations."],
 ["Mumbai","A major Indian city famous for films and the Gateway of India."],
-["Bollywood","India's Hindi-language film industry based mainly in Mumbai."],
-["Auto Rickshaw","A small three-wheeled vehicle commonly used for local transport."]
+["Bollywood","The Hindi-language film industry based mainly in Mumbai."],
+["India Gate","A famous war memorial in New Delhi."],
+["Red Fort","A historic red sandstone fort in Delhi."],
+["Gateway of India","A famous monument overlooking the Arabian Sea in Mumbai."],
+["Hawa Mahal","A famous Jaipur palace known for its many windows."],
+["Kerala","An Indian state famous for backwaters and greenery."],
+["Goa","An Indian coastal destination famous for beaches and tourism."],
+["Varanasi","An ancient city on the Ganges known for spiritual traditions."],
+["Kashmir","A Himalayan region famous for mountains, lakes and scenery."],
+["Rajasthan","An Indian state famous for forts, deserts and palaces."],
+["ISRO","India's national space research organisation."],
+["UPI","A popular Indian digital payment system."],
+["Yoga","An ancient practice involving physical and mental disciplines."],
+["Hockey","A major sport with a long history in India."],
+["Saree","A traditional Indian garment worn in many regions."],
+["Auto Rickshaw","A common three-wheeled vehicle used for local transport."],
+["Lotus Temple","A famous New Delhi building shaped like a lotus flower."],
+["Qutub Minar","A historic tower in Delhi."],
+["Golden Temple","A famous Sikh shrine in Amritsar."],
+["Indian Railways","India's large national railway network."],
+["Ganges","A major river with deep cultural significance in India."],
+["Himalayas","A major mountain range in northern India and neighboring countries."],
+["Chai","A popular Indian tea drink."],
+["Namaste","A traditional Indian greeting."],
+
 ],
+
+
+/* =========================================================
+   FAMOUS IN TELANGANA
+========================================================= */
+
 "Famous in Telangana":[
-["Hyderabad","A major Telangana city famous for Charminar and biryani."],
-["Charminar","A historic Hyderabad monument with four tall arches and minarets."],
-["Golconda Fort","A historic fort near Hyderabad known for its walls and architecture."],
-["Hussain Sagar","A large lake in Hyderabad with a famous Buddha statue."],
-["Bathukamma","A colorful Telangana flower festival celebrated mainly by women."],
+
+["Hyderabad","The capital city of Telangana."],
+["Charminar","A historic Hyderabad monument famous for its four minarets."],
+["Golconda Fort","A historic fort near Hyderabad known for its architecture and history."],
+["Hussain Sagar","A large Hyderabad lake famous for its Buddha statue."],
+["Tank Bund","A popular road along Hussain Sagar in Hyderabad."],
+["Bathukamma","A colorful Telangana flower festival."],
 ["Bonalu","A traditional Telangana festival involving offerings to local goddesses."],
-["Ramoji Film City","A huge film studio complex and tourist attraction near Hyderabad."],
-["Osmania Biscuit","A popular Hyderabad biscuit known for its sweet and salty taste."]
+["Ramoji Film City","A large film studio complex and tourist attraction near Hyderabad."],
+["Osmania Biscuit","A popular Hyderabad biscuit with a sweet and salty flavor."],
+["Haleem","A popular Hyderabad dish especially associated with Ramadan."],
+["Telangana Thalli","A symbolic representation associated with Telangana."],
+["Kakatiya","A historic dynasty strongly associated with Telangana."],
+["Warangal","A major historic city in Telangana."],
+["Ramappa Temple","A famous historic temple in Telangana."],
+["Yadadri","A famous pilgrimage destination in Telangana."],
+["Medaram","A Telangana pilgrimage destination famous for its tribal festival."],
+["Nizam","A historic ruling dynasty associated with Hyderabad."],
+["Hyderabadi Biryani","A famous rice dish strongly associated with Hyderabad."],
+["Telangana","A state in southern India."],
+["Sammakka Saralamma Jatara","A major tribal festival held at Medaram in Telangana."],
+["Kakatiya Kala Thoranam","A historic arch associated with Telangana heritage."],
+["Nizamabad","A major city in northern Telangana."],
+["Karimnagar","A major city in Telangana."],
+["Khammam","A major city in Telangana."],
+["Nalgonda","A city and district in Telangana."],
+["Adilabad","A northern Telangana city known for natural surroundings."]
+
 ],
-"Telangana Movies & Entertainment":[
-["Baahubali","A famous Indian epic film series with warriors, kingdoms and battles."],
-["RRR","A popular Indian action film featuring two revolutionary heroes."],
-["Pushpa","A Telugu action film centered around a sandalwood smuggler."],
-["Arjun Reddy","A Telugu romantic drama about a passionate and troubled doctor."],
-["Jersey","A sports drama about a former cricket player returning to the game."],
-["DJ Tillu","A Telugu comedy film featuring a talkative young man."]
+
+
+/* =========================================================
+   TFI MOVIES & BLOCKBUSTERS
+========================================================= */
+
+"TFI Movies & Blockbusters":[
+
+["Mayabazar","A legendary Telugu classic featuring mythology, comedy and unforgettable characters."],
+["Missamma","A beloved Telugu classic comedy about mistaken identities and family relationships."],
+["Gundamma Katha","A famous Telugu family comedy centered around a strong-willed woman and her daughters."],
+["Lava Kusa","A classic Telugu mythological film based on the story of Rama's sons."],
+["Aditya 369","A Telugu science-fiction adventure involving time travel and historical periods."],
+["Shiva","A landmark Telugu action film set around student life and organized crime."],
+["Jagadeka Veerudu Athiloka Sundari","A popular fantasy adventure featuring a mortal man and a celestial woman."],
+["Indra","A Telugu mass action drama centered on family honor and powerful rivalries."],
+["Simhadri","A popular Telugu action drama about loyalty, family and a powerful protector."],
+["Okkadu","A Telugu action film involving a kabaddi player protecting a woman from a dangerous rival."],
+["Pokiri","A highly popular Telugu action thriller involving an undercover police operation."],
+["Bommarillu","A popular Telugu romantic family drama about love and a controlling father."],
+["Vikramarkudu","A Telugu action film involving a fearless police officer and a mysterious identity."],
+["Desamuduru","A Telugu action-romance film involving a journalist and a strong-willed woman."],
+["Athadu","A Telugu action thriller about a professional killer caught in a complicated family situation."],
+["Magadheera","A grand Telugu fantasy action film involving reincarnation and an ancient kingdom."],
+["Eega","A Telugu fantasy film where a murdered man is reincarnated as a housefly."],
+["Gabbar Singh","A popular Telugu action comedy centered around a fearless police officer."],
+["Julayi","A Telugu action comedy involving a clever man and a dangerous criminal."],
+["Mirchi","A Telugu action drama involving family rivalry, love and reconciliation."],
+["Attarintiki Daredi","A popular Telugu family comedy about a grandson trying to reunite his family."],
+["Race Gurram","A Telugu action comedy featuring a carefree man facing a powerful criminal."],
+["Manam","A Telugu family fantasy drama connecting generations through reincarnation."],
+["Baahubali: The Beginning","A massive Telugu epic about kingdoms, warriors and a mysterious young hero."],
+["Srimanthudu","A Telugu family action drama about a wealthy man helping develop his father's village."],
+["Baahubali 2: The Conclusion","A grand Telugu epic continuing the story of the Baahubali kingdom."],
+["Arjun Reddy","A Telugu romantic drama about a brilliant but troubled doctor."],
+["Mahanati","A celebrated Telugu biographical drama about a legendary actress."],
+["Rangasthalam","A Telugu period drama set in a village with political rivalry and family conflict."],
+["Bharat Ane Nenu","A Telugu political drama about a young man becoming chief minister."],
+["Geetha Govindam","A popular Telugu romantic comedy involving misunderstandings and an unlikely relationship."],
+["Ala Vaikunthapurramuloo","A Telugu family drama featuring identity, wealth and family relationships."],
+["Sarileru Neekevvaru","A Telugu action comedy about an army officer facing corruption."],
+["Akhanda","A Telugu mass action film featuring a powerful spiritual warrior."],
+["Pushpa: The Rise","A Telugu action drama about a red sandalwood smuggler."],
+["RRR","A Telugu action epic featuring two revolutionary heroes."],
+["Sita Ramam","A romantic Telugu period drama involving letters and a mysterious soldier."],
+["Karthikeya 2","A Telugu adventure mystery involving mythology and a hidden secret."],
+["Dasara","A Telugu rural action drama set in a coal-mining village."],
+["Hanu-Man","A Telugu superhero fantasy film involving mythology and special powers."],
+["Salaar: Part 1 - Ceasefire","A Telugu action epic centered around friendship and violent rivalries."],
+["Hi Nanna","A Telugu emotional family romance involving a father and daughter."],
+["Guntur Kaaram","A Telugu action family drama involving a powerful businessman."],
+["Kalki 2898 AD","A Telugu science-fiction epic inspired by Indian mythology."],
+["Devara: Part 1","A Telugu action drama set around coastal communities and powerful rivalries."],
+["Pushpa 2: The Rule","A Telugu action sequel continuing Pushpa's rise."],
+["They Call Him OG","A Telugu gangster action film centered around a feared underworld figure."],
+["Sankranthiki Vasthunam","A Telugu family action comedy involving a retired police officer."],
+["Game Changer","A Telugu political action drama involving corruption and an honest officer."],
+["Jersey","A Telugu sports drama about a former cricketer returning to the game."],
+["DJ Tillu","A Telugu comedy about a talkative young man."],
+["Bheemla Nayak","A Telugu action drama involving a police officer and a powerful rival."],
+["Waltair Veerayya","A Telugu mass action comedy centered around a larger-than-life fisherman."],
+["Veera Simha Reddy","A Telugu action drama involving family, loyalty and rivalry."],
+["Khaidi No. 150","A Telugu action drama involving farmers and justice."],
+["Jai Lava Kusa","A Telugu action drama featuring three brothers with different personalities."],
+["Sye Raa Narasimha Reddy","A Telugu historical action epic about a freedom fighter."],
+["Janatha Garage","A Telugu action drama involving an influential family and social justice."],
+["Spyder","A Telugu action thriller involving a crime investigation."],
+["Saaho","A Telugu action thriller involving crime, mystery and a powerful underworld."],
+["Maharshi","A Telugu social drama about success, friendship and rural development."],
+["Sarkaru Vaari Paata","A Telugu action drama involving money, banking and corruption."],
+["Aravinda Sametha Veera Raghava","A Telugu action drama involving family rivalry and peace."],
+["Temper","A Telugu action drama centered around a corrupt police officer who changes."],
+["Nannaku Prematho","A Telugu family revenge drama involving intelligence and emotional relationships."],
+["Fidaa","A Telugu romantic drama involving two people from different backgrounds."],
+["Tholi Prema","A beloved Telugu romantic film centered on young love."],
+["Kushi","A Telugu romantic comedy about a young couple."],
+["Ye Maaya Chesave","A Telugu romantic drama about love and filmmaking."],
+["Orange","A Telugu romantic drama centered around modern relationships."],
+["Leader","A Telugu political drama about a young chief minister."],
+["Goodachari","A Telugu spy thriller involving an undercover agent."],
+["Evaru","A Telugu mystery thriller involving a complicated murder investigation."],
+["Hit: The First Case","A Telugu crime thriller following a police officer investigating a disappearance."],
+["Jathi Ratnalu","A popular Telugu comedy about three friends and unexpected situations."],
+["Pellichoopulu","A Telugu romantic comedy about career, relationships and food."]
+
 ],
+
+
+/* =========================================================
+   INDIAN CRICKET & SPORTS
+========================================================= */
+
 "Indian Cricket & Sports":[
+
 ["Virat Kohli","A famous Indian cricketer known for batting and leadership."],
 ["MS Dhoni","A celebrated Indian cricketer known for wicketkeeping and captaincy."],
 ["Rohit Sharma","An Indian cricketer famous for powerful batting and captaincy."],
-["Cricket Stadium","A large sports venue where major cricket matches are played."],
-["IPL","A major Indian professional cricket league featuring city-based teams."],
-["Badminton","A racket sport played with a lightweight shuttlecock."]
+["Sachin Tendulkar","One of India's most famous cricketers and batsmen."],
+["Kapil Dev","A legendary Indian cricketer and former captain."],
+["Jasprit Bumrah","An Indian fast bowler known for an unusual bowling action."],
+["Hardik Pandya","An Indian cricketer known as an all-rounder."],
+["Ravindra Jadeja","An Indian cricketer known for all-round skills and fielding."],
+["IPL","A major professional cricket league featuring city-based teams."],
+["Cricket Stadium","A large venue where cricket matches are played."],
+["World Cup","An international tournament contested by national teams."],
+["Badminton","A racket sport played with a shuttlecock."],
+["Hockey","A team sport played with sticks and a ball."],
+["Football","A team sport played by kicking a ball toward a goal."],
+["Kabaddi","A traditional South Asian team sport involving tagging opponents."],
+["Chess","A strategy board game played between two players."],
+["Wrestling","A combat sport involving grappling and physical control."],
+["Boxing","A combat sport involving punches and defensive movement."],
+["Tennis","A racket sport played over a net."],
+["PV Sindhu","A famous Indian badminton player and Olympic medalist."],
+["Neeraj Chopra","An Indian Olympic champion known for javelin throw."],
+["Sania Mirza","A famous Indian tennis player."],
+["Sunil Chhetri","A famous Indian football player."],
+["Smriti Mandhana","A famous Indian women's cricket player."],
+["Shubman Gill","An Indian cricketer known for elegant batting."]
+
 ],
+
+
+/* =========================================================
+   INDIAN FESTIVALS & CULTURE
+========================================================= */
+
 "Indian Festivals & Culture":[
-["Holi","A colorful festival where people celebrate by playing with colored powder."],
+
+["Diwali","A major festival of lights celebrated across India."],
+["Holi","A colorful festival involving colored powder and water."],
 ["Sankranti","A harvest festival celebrated in many parts of India."],
 ["Ugadi","A traditional New Year festival celebrated in parts of South India."],
-["Dussehra","A major festival associated with the victory of good over evil."],
-["Diwali","A festival of lights celebrated with lamps, sweets and family gatherings."],
-["Bathukamma","A Telangana flower festival featuring beautifully arranged flowers."]
+["Dussehra","A festival associated with the victory of good over evil."],
+["Bathukamma","A Telangana flower festival featuring beautiful flower arrangements."],
+["Bonalu","A Telangana festival involving offerings to local goddesses."],
+["Ganesh Chaturthi","A festival celebrating Lord Ganesha."],
+["Navratri","A festival period dedicated to forms of the divine feminine."],
+["Durga Puja","A major festival celebrating Goddess Durga."],
+["Onam","A major festival associated with Kerala."],
+["Pongal","A harvest festival strongly associated with Tamil Nadu."],
+["Baisakhi","A harvest festival celebrated especially in Punjab."],
+["Christmas","A Christian festival celebrating the birth of Jesus."],
+["Eid","A major Islamic festival celebrated by Muslims worldwide."],
+["Raksha Bandhan","A festival celebrating the bond between brothers and sisters."],
+["Janmashtami","A festival celebrating the birth of Lord Krishna."],
+["Ram Navami","A festival celebrating the birth of Lord Rama."],
+["Maha Shivaratri","A Hindu festival dedicated to Lord Shiva."],
+["Vijayadashami","A festival associated with victory of good over evil."],
+["Puja","A form of worship practiced in Hindu traditions."],
+["Rangoli","A decorative design traditionally made on floors."],
+["Diya","A small oil lamp commonly used during festivals."],
+["Garba","A traditional dance associated with Gujarat."],
+["Dandiya","A traditional dance using decorated sticks."],
+["Mehndi","Decorative body art traditionally applied with henna."],
+["Saree","A traditional Indian garment."],
+["Kurta","A traditional South Asian garment."],
+["Namaste","A traditional Indian greeting gesture."],
+["Yoga","A practice involving physical and mental disciplines."]
+
 ],
+
+
+/* =========================================================
+   INDIAN CITIES & PLACES
+========================================================= */
+
 "Indian Cities & Places":[
-["Goa","An Indian coastal destination known for beaches and tourism."],
-["Jaipur","A historic city known for forts, palaces and pink-colored buildings."],
-["Varanasi","An ancient city on the Ganges known for spiritual traditions."],
-["India Gate","A famous war memorial located in New Delhi."],
-["Red Fort","A historic red sandstone fort in Delhi."],
-["Darjeeling","A hill town known for tea gardens and mountain views."]
+
+["Mumbai","A major city famous for Bollywood and the Gateway of India."],
+["Delhi","India's capital territory and home to many historic landmarks."],
+["Hyderabad","A major southern city famous for Charminar and biryani."],
+["Bengaluru","A major technology hub known for its IT industry."],
+["Kolkata","A major eastern Indian city associated with literature and culture."],
+["Pune","A major Maharashtra city known for education and technology."],
+["Jaipur","A historic city famous for forts and palaces."],
+["Agra","A city famous for the Taj Mahal."],
+["Varanasi","An ancient city on the Ganges with major religious significance."],
+["Goa","A coastal destination famous for beaches and tourism."],
+["Darjeeling","A hill town famous for tea gardens and mountain views."],
+["Amritsar","A city famous for the Golden Temple."],
+["Mysore","A Karnataka city famous for its palace and heritage."],
+["Ahmedabad","A major Gujarat city and industrial center."],
+["Lucknow","A city famous for Awadhi culture and architecture."],
+["Udaipur","A Rajasthan city famous for lakes and palaces."],
+["Kochi","A Kerala city famous for its port and coastal culture."],
+["Rishikesh","A city famous for yoga, spirituality and the Ganges."],
+["Srinagar","A Himalayan city famous for lakes and houseboats."],
+["Surat","A major Gujarat city known for diamond and textile industries."],
+["Nagpur","A major Maharashtra city located near the geographical center of India."],
+["Bhopal","The capital of Madhya Pradesh."],
+["Indore","A major Madhya Pradesh city known for food and commerce."],
+["Patna","The capital city of Bihar."],
+["Bhubaneswar","The capital city of Odisha."],
+["Visakhapatnam","A major coastal city in Andhra Pradesh."],
+["Vijayawada","A major city on the Krishna River in Andhra Pradesh."],
+["Tirupati","A famous pilgrimage city in Andhra Pradesh."],
+["Coimbatore","A major Tamil Nadu city known for industry and education."]
+
 ],
+
+
+/* =========================================================
+   TELANGANA PLACES
+========================================================= */
+
 "Telangana Places":[
-["Charminar","A historic monument in the heart of Hyderabad."],
-["Golconda Fort","A historic fort famous for its massive walls and architecture."],
-["Tank Bund","A popular Hyderabad road beside Hussain Sagar Lake."],
-["Hussain Sagar","A Hyderabad lake known for its large Buddha statue."],
-["Ramoji Film City","A famous film studio complex and tourist attraction near Hyderabad."],
-["Nehru Zoological Park","A large zoo in Hyderabad with many animal species."]
+
+["Charminar","A historic monument in Hyderabad."],
+["Golconda Fort","A massive historic fort near Hyderabad."],
+["Tank Bund","A popular Hyderabad road beside Hussain Sagar."],
+["Hussain Sagar","A famous Hyderabad lake with a Buddha statue."],
+["Ramoji Film City","A huge film studio complex near Hyderabad."],
+["Nehru Zoological Park","A large zoo in Hyderabad."],
+["Warangal Fort","A historic fort known for its distinctive gateways."],
+["Ramappa Temple","A historic temple and UNESCO World Heritage Site."],
+["Yadadri Temple","A famous Telangana temple dedicated to Lord Narasimha."],
+["Thousand Pillar Temple","A historic temple in Hanamkonda."],
+["Bhongir Fort","A historic hilltop fort near Hyderabad."],
+["Nagarjuna Sagar","A major reservoir and tourist destination."],
+["Kuntala Waterfall","A famous waterfall in Telangana."],
+["Bogatha Waterfall","A scenic waterfall in Telangana."],
+["Medaram","A major Telangana pilgrimage destination."],
+["Salar Jung Museum","A famous Hyderabad museum with a large collection."],
+["Birla Mandir","A hilltop temple overlooking Hyderabad."],
+["Mecca Masjid","A historic mosque near Charminar."],
+["Qutb Shahi Tombs","Historic tombs near Golconda Fort."],
+["Chowmahalla Palace","A historic palace complex in Hyderabad."],
+["Nizamabad","A major city in northern Telangana."],
+["Karimnagar","A major city in Telangana."],
+["Khammam","A major city in Telangana."],
+["Nalgonda","A city and district in Telangana."],
+["Adilabad","A northern Telangana city known for natural surroundings."],
+["Siddipet","A major town in Telangana."],
+["Mulugu","A district known for forests and waterfalls."],
+["Warangal","A historic city strongly associated with the Kakatiya dynasty."],
+["Hyderabad","The capital city of Telangana."],
+["Hussain Sagar Buddha","A famous Buddha statue located in Hussain Sagar."]
+
 ],
+
+
+/* =========================================================
+   TELANGANA FOOD
+========================================================= */
+
 "Telangana Food":[
-["Hyderabadi Biryani","A famous rice dish from Hyderabad cooked with aromatic spices."],
-["Osmania Biscuit","A Hyderabad biscuit known for its distinctive sweet-salty flavor."],
+
+["Hyderabadi Biryani","A famous Hyderabad rice dish cooked with aromatic spices."],
+["Osmania Biscuit","A Hyderabad biscuit with a sweet-salty taste."],
 ["Haleem","A thick slow-cooked dish made with grains, lentils and meat."],
-["Mirchi Bajji","A popular spicy snack made by frying stuffed green chilies."],
-["Double Ka Meetha","A sweet Hyderabad dessert made from fried bread and milk."],
-["Qubani Ka Meetha","A traditional Hyderabad dessert made with dried apricots."]
+["Mirchi Bajji","A spicy snack made by frying green chilies."],
+["Double Ka Meetha","A Hyderabad dessert made from fried bread and milk."],
+["Qubani Ka Meetha","A traditional Hyderabad dessert made with dried apricots."],
+["Irani Chai","A popular tea style strongly associated with Hyderabad."],
+["Sarva Pindi","A savory Telangana rice-flour pancake with spices."],
+["Sakinalu","A traditional Telangana snack often prepared during festivals."],
+["Garelu","A fried South Indian snack made from lentil batter."],
+["Pesarattu","A green gram dosa popular in Telugu cuisine."],
+["Pulihora","A tangy rice dish flavored with tamarind and spices."],
+["Bobbatlu","A sweet flatbread filled with a lentil and jaggery mixture."],
+["Pootharekulu","A delicate Telugu sweet made with thin rice sheets."],
+["Kodi Kura","A spicy Telugu-style chicken curry."],
+["Gongura Pachadi","A tangy chutney made from sorrel leaves."],
+["Royyala Iguru","A spicy Telugu-style prawn preparation."],
+["Bajji","A fried snack made by coating vegetables in batter."],
+["Daddojanam","A South Indian curd rice preparation."],
+["Jonna Roti","A traditional flatbread made from sorghum flour."],
+["Pachi Pulusu","A tangy Telangana preparation using tamarind and spices."],
+["Mirapakaya Bajji","A popular spicy fried chili snack."],
+["Kodi Vepudu","A spicy Telangana-style chicken preparation."],
+["Mutton Curry","A spicy meat curry prepared in Telugu cuisine."],
+["Chakinalu","A traditional crispy Telangana festival snack."],
+["Ragi Sangati","A traditional dish made using ragi and rice."],
+["Pappu","A staple lentil preparation common in Telugu cuisine."],
+["Perugu","Curd or yogurt commonly served with meals."],
+["Majjiga","A traditional buttermilk drink."],
+["Natu Kodi Kura","A traditional country-chicken curry preparation."]
+
 ],
+
+
+/* =========================================================
+   TELUGU SONGS & MUSIC
+========================================================= */
+
 "Telugu Songs & Music":[
+
 ["Telugu Song","A song performed in the Telugu language."],
 ["Folk Song","A traditional song passed through communities and generations."],
 ["Film Song","A song created as part of a movie."],
-["Melody","A pleasing sequence of musical notes that forms a tune."],
+["Melody","A pleasing sequence of musical notes forming a tune."],
 ["Drum","A percussion instrument played by striking its surface."],
-["Guitar","A string instrument commonly played with fingers or a pick."]
+["Guitar","A string instrument commonly played with fingers or a pick."],
+["Flute","A wind instrument played by blowing across an opening."],
+["Violin","A bowed string instrument."],
+["Veena","A traditional Indian string instrument."],
+["Tabla","A pair of Indian hand drums."],
+["Dappu","A traditional percussion instrument used in Telugu folk performances."],
+["Classical Music","Music based on established traditional musical systems."],
+["Folk Music","Music rooted in traditional communities and cultural practices."],
+["Playback Singer","A singer whose recorded voice is used in films."],
+["Background Score","Instrumental music used to support scenes in films."],
+["Mass Song","A high-energy popular film song designed for entertainment."],
+["Love Song","A song centered around romance and relationships."],
+["Devotional Song","A song expressing religious devotion."],
+["Dance Song","A song commonly used for a choreographed performance."],
+["Duet","A musical performance involving two singers or performers."],
+["Composer","A person who creates or writes music."],
+["Lyricist","A person who writes song lyrics."],
+["Folk Dance","A traditional dance associated with a community or region."],
+["DJ","A person who selects and plays recorded music."],
+["Concert","A live musical performance for an audience."]
+
 ],
+
+
+/* =========================================================
+   TEMPLES & FAMOUS PLACES
+========================================================= */
+
 "Temples & Famous Places":[
-["Tirupati","A famous pilgrimage city in Andhra Pradesh known for its temple."],
-["Mecca Masjid","A historic mosque located near Charminar in Hyderabad."],
-["Salar Jung Museum","A Hyderabad museum known for its large collection of art and objects."],
-["Birla Mandir","A hilltop temple in Hyderabad overlooking Hussain Sagar."],
+
+["Tirupati","A famous pilgrimage city known for the Venkateswara temple."],
+["Mecca Masjid","A historic mosque located near Charminar."],
+["Salar Jung Museum","A Hyderabad museum famous for its large collection."],
+["Birla Mandir","A hilltop temple in Hyderabad."],
 ["Yadadri Temple","A famous Telangana temple dedicated to Lord Narasimha."],
-["Warangal Fort","A historic fort in Telangana known for its distinctive gateways."]
+["Warangal Fort","A historic fort in Telangana."],
+["Ramappa Temple","A historic temple and UNESCO World Heritage Site."],
+["Thousand Pillar Temple","A historic temple near Warangal."],
+["Golden Temple","A famous Sikh shrine in Amritsar."],
+["Kashi Vishwanath","A famous Hindu temple in Varanasi."],
+["Somnath Temple","A famous Hindu temple in Gujarat."],
+["Jagannath Temple","A major temple in Puri."],
+["Meenakshi Temple","A famous temple in Madurai."],
+["Konark Sun Temple","A historic temple famous for its architecture."],
+["Sanchi Stupa","An ancient Buddhist monument in Madhya Pradesh."],
+["India Gate","A famous war memorial in New Delhi."],
+["Taj Mahal","A famous marble monument in Agra."],
+["Red Fort","A historic fort in Delhi."],
+["Qutub Minar","A famous historic tower in Delhi."],
+["Gateway of India","A famous monument in Mumbai."],
+["Lotus Temple","A famous modern landmark in Delhi."],
+["Charminar","A famous historic monument in Hyderabad."],
+["Golconda Fort","A historic fort near Hyderabad."],
+["Kedarnath","A major Himalayan pilgrimage destination."],
+["Badrinath","A major Hindu pilgrimage site in Uttarakhand."],
+["Vaishno Devi","A major pilgrimage destination in Jammu and Kashmir."],
+["Shirdi","A pilgrimage town associated with Sai Baba."],
+["Mahabalipuram","A historic coastal site famous for stone temples and monuments."],
+["Ajanta Caves","Ancient Buddhist cave monuments in Maharashtra."]
+
 ],
+
+
+/* =========================================================
+   EVERYDAY THINGS
+========================================================= */
+
 "Everyday Things":[
+
 ["Laptop","A portable computer used for work, study and entertainment."],
 ["Camera","A device used to capture photographs and videos."],
 ["Umbrella","An object used to protect people from rain or sunlight."],
 ["Bicycle","A two-wheeled vehicle powered by pedaling."],
-["Watch","A small device worn or carried to tell time."],
-["Bottle","A container commonly used for carrying liquids."]
+["Watch","A device used to tell time."],
+["Bottle","A container commonly used for carrying liquids."],
+["Phone","A device used for communication and digital activities."],
+["Television","An electronic device used for watching video and broadcasts."],
+["Chair","Furniture designed for one person to sit on."],
+["Table","Furniture with a flat surface used for various activities."],
+["Bag","A container used to carry personal items."],
+["Shoes","Footwear worn to protect the feet."],
+["Keys","Small objects commonly used to open locks."],
+["Wallet","A small holder used for money and cards."],
+["Mirror","A reflective surface used to see one's image."],
+["Pen","A writing instrument using ink."],
+["Book","A collection of written or printed pages."],
+["Pencil","A writing instrument commonly using graphite."],
+["Backpack","A bag designed to be carried on the back."],
+["Headphones","Audio devices worn over or inside the ears."],
+["Remote","A device used to control another electronic device."],
+["Bed","Furniture designed for sleeping or resting."],
+["Pillow","A soft object used to support the head."],
+["Door","A movable structure used to open or close an entrance."],
+["Window","An opening in a wall that usually contains glass."],
+["Fan","A device that moves air around a room."],
+["Fridge","An appliance used to keep food and drinks cold."],
+["Toothbrush","A small tool used for cleaning teeth."],
+["Comb","A tool with teeth used for arranging hair."],
+["Towel","A piece of fabric used for drying."]
+
 ]
+
 };
 
-const categories=Object.keys(data);
-let category=categories[0],players=5,spy=-1,current=0,used=[],word="",clue="",timer=60,timerId=null,vote=-1;
+
+/* =========================================================
+   GAME VARIABLES
+========================================================= */
+
+const categories = Object.keys(data);
+
+let category = categories[0];
+
+let players = 5;
+
+let spy = -1;
+
+let current = 0;
+
+let used = [];
+
+let word = "";
+
+let clue = "";
+
+let timer = 60;
+
+let timerId = null;
+
+let vote = -1;
+
+
+/* =========================================================
+   SCREEN CONTROL
+========================================================= */
 
 function show(id){
- document.querySelectorAll(".screen").forEach(x=>x.classList.add("hidden"));
- document.getElementById(id).classList.remove("hidden");
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(screen =>
+      screen.classList.add("hidden")
+    );
+
+  const target =
+    document.getElementById(id);
+
+  if(target){
+    target.classList.remove("hidden");
+  }
+
 }
+
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+function goCategory(){
+
+  renderCategories();
+
+  show("category");
+
+}
+
 
 function renderCategories(){
- const el=document.getElementById("categories");
- el.innerHTML="";
- categories.forEach((c,i)=>{
-  const b=document.createElement("button");
-  b.className="choice"+(c===category?" selected":"");
-  b.innerHTML=c+"<small>"+data[c].length+" topics</small>";
-  b.onclick=()=>{category=c;renderCategories()};
-  el.appendChild(b);
- });
+
+  const el =
+    document.getElementById("categories");
+
+  el.innerHTML = "";
+
+  categories.forEach(c => {
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "choice" +
+      (c === category ? " selected" : "");
+
+    button.textContent = c;
+
+    button.onclick = () => {
+
+      category = c;
+
+      renderCategories();
+
+    };
+
+    el.appendChild(button);
+
+  });
+
 }
+
+
+/* =========================================================
+   PLAYER COUNT
+========================================================= */
 
 function renderNumbers(){
- const el=document.getElementById("numbers");
- el.innerHTML="";
- for(let i=3;i<=12;i++){
-  const b=document.createElement("button");
-  b.className="number"+(i===players?" selected":"");
-  b.textContent=i;
-  b.onclick=()=>{players=i;renderNumbers();document.getElementById("playerCount").textContent=i};
-  el.appendChild(b);
- }
+
+  const el =
+    document.getElementById("numbers");
+
+  el.innerHTML = "";
+
+  for(let i = 3; i <= 12; i++){
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "number" +
+      (i === players ? " selected" : "");
+
+    button.textContent = i;
+
+    button.onclick = () => {
+
+      players = i;
+
+      document
+        .getElementById("playerCount")
+        .textContent = i;
+
+      renderNumbers();
+
+    };
+
+    el.appendChild(button);
+
+  }
+
 }
 
-function goPlayers(){renderNumbers();show("players")}
+
+function goPlayers(){
+
+  renderNumbers();
+
+  show("players");
+
+}
+
+
+/* =========================================================
+   START GAME
+========================================================= */
 
 function startGame(){
- const pool=data[category];
- const item=pool[Math.floor(Math.random()*pool.length)];
- word=item[0];clue=item[1];
- spy=Math.floor(Math.random()*players);
- current=0;used=[];
- showPass();
+
+  const pool = data[category];
+
+  if(!pool || pool.length === 0){
+
+    alert("No words are available in this category.");
+
+    return;
+
+  }
+
+  const item =
+    pool[Math.floor(Math.random() * pool.length)];
+
+  word = item[0];
+
+  clue = item[1];
+
+  spy =
+    Math.floor(Math.random() * players);
+
+  current = 0;
+
+  used = [];
+
+  vote = -1;
+
+  showPass();
+
 }
+
+
+/* =========================================================
+   PASS PHONE
+========================================================= */
 
 function showPass(){
- document.getElementById("passText").textContent="Give the phone to Player "+(current+1)+".";
- show("pass");
+
+  document
+    .getElementById("passText")
+    .textContent =
+      "Give the phone to Player " +
+      (current + 1) +
+      ".";
+
+  show("pass");
+
 }
+
+
+/* =========================================================
+   MYSTERY CARDS
+========================================================= */
 
 function showCards(){
- document.getElementById("cardTitle").textContent="Player "+(current+1)+" — choose a card";
- const grid=document.getElementById("cardsGrid");
- grid.innerHTML="";
- for(let i=0;i<players;i++){
-  if(used.includes(i))continue;
-  const b=document.createElement("button");
-  b.className="card";
-  b.textContent="?";
-  b.onclick=()=>pickCard(i);
-  grid.appendChild(b);
- }
- show("cards");
+
+  document
+    .getElementById("cardTitle")
+    .textContent =
+      "Player " +
+      (current + 1);
+
+  const grid =
+    document.getElementById("cardsGrid");
+
+  grid.innerHTML = "";
+
+  for(let i = 0; i < players; i++){
+
+    if(used.includes(i)){
+      continue;
+    }
+
+    const button =
+      document.createElement("button");
+
+    button.className = "card";
+
+    button.textContent = "?";
+
+    button.onclick = () =>
+      pickCard(i);
+
+    grid.appendChild(button);
+
+  }
+
+  show("cards");
+
 }
+
+
+/* =========================================================
+   PICK CARD
+========================================================= */
 
 function pickCard(index){
- used.push(index);
- const isSpy=(index===spy);
- document.getElementById("rolePlayer").textContent="PLAYER "+(current+1);
- const panel=document.getElementById("rolePanel");
- const area=document.getElementById("secretArea");
- if(isSpy){
-  panel.classList.add("spybox");
-  document.getElementById("roleBadge").textContent="🕵️";
-  document.getElementById("roleName").textContent="YOU ARE THE SPY";
-  area.innerHTML="";
-  document.getElementById("roleNote").textContent="Blend in. Ask smart questions. Never reveal that you are the Spy.";
- }else{
-  panel.classList.remove("spybox");
-  document.getElementById("roleBadge").textContent="👤";
-  document.getElementById("roleName").textContent="CITIZEN";
-  area.innerHTML='<div class="word">'+escapeHtml(word)+'</div><div class="clue">'+escapeHtml(clue)+'</div>';
-  document.getElementById("roleNote").textContent="Remember the word and clue. Don't show anyone!";
- }
- show("role");
+
+  used.push(index);
+
+  const isSpy =
+    index === spy;
+
+  document
+    .getElementById("rolePlayer")
+    .textContent =
+      "PLAYER " +
+      (current + 1);
+
+  const panel =
+    document.getElementById("rolePanel");
+
+  const area =
+    document.getElementById("secretArea");
+
+
+  if(isSpy){
+
+    panel.classList.add("spybox");
+
+    document
+      .getElementById("roleBadge")
+      .textContent = "🕵️";
+
+    document
+      .getElementById("roleName")
+      .textContent =
+        "YOU ARE THE SPY";
+
+    area.innerHTML = "";
+
+    document
+      .getElementById("roleNote")
+      .textContent =
+        "Blend in. Ask smart questions. Never reveal that you are the Spy.";
+
+  }else{
+
+    panel.classList.remove("spybox");
+
+    document
+      .getElementById("roleBadge")
+      .textContent = "👤";
+
+    document
+      .getElementById("roleName")
+      .textContent =
+        "CITIZEN";
+
+    area.innerHTML =
+      '<div class="word">' +
+      escapeHtml(word) +
+      '</div>' +
+      '<div class="clue">' +
+      escapeHtml(clue) +
+      '</div>';
+
+    document
+      .getElementById("roleNote")
+      .textContent =
+      "Remember the word and clue. Don't show anyone!";
+
+  }
+
+  show("role");
+
 }
+
+
+/* =========================================================
+   FINISH ROLE
+========================================================= */
 
 function finishReveal(){
- current++;
- if(current<players)showPass();
- else{
-  document.getElementById("timer").textContent="60";
-  show("discussion");
- }
+
+  current++;
+
+  if(current < players){
+
+    showPass();
+
+  }else{
+
+    timer = 60;
+
+    document
+      .getElementById("timer")
+      .textContent = "60";
+
+    show("discussion");
+
+  }
+
 }
+
+
+/* =========================================================
+   TIMER
+========================================================= */
 
 function startTimer(){
- if(timerId)return;
- timer=60;
- document.getElementById("timer").textContent=timer;
- timerId=setInterval(()=>{
-  timer--;
-  document.getElementById("timer").textContent=timer;
-  if(timer<=0){
-   clearInterval(timerId);timerId=null;startVoting();
+
+  if(timerId){
+    return;
   }
- },1000);
+
+  timer = 60;
+
+  document
+    .getElementById("timer")
+    .textContent =
+      timer;
+
+  timerId =
+    setInterval(() => {
+
+      timer--;
+
+      document
+        .getElementById("timer")
+        .textContent =
+          timer;
+
+      if(timer <= 0){
+
+        clearInterval(timerId);
+
+        timerId = null;
+
+        startVoting();
+
+      }
+
+    },1000);
+
 }
+
+
+/* =========================================================
+   VOTING
+========================================================= */
 
 function startVoting(){
- if(timerId){clearInterval(timerId);timerId=null}
- vote=-1;
- const el=document.getElementById("voteList");
- el.innerHTML="";
- for(let i=0;i<players;i++){
-  const b=document.createElement("button");
-  b.className="vote";
-  b.textContent="Player "+(i+1);
-  b.onclick=()=>{
-   vote=i;
-   [...el.children].forEach(x=>x.classList.remove("selected"));
-   b.classList.add("selected");
-  };
-  el.appendChild(b);
- }
- show("voting");
+
+  if(timerId){
+
+    clearInterval(timerId);
+
+    timerId = null;
+
+  }
+
+  vote = -1;
+
+  const el =
+    document.getElementById("voteList");
+
+  el.innerHTML = "";
+
+  for(let i = 0; i < players; i++){
+
+    const button =
+      document.createElement("button");
+
+    button.className = "vote";
+
+    button.textContent =
+      "Player " +
+      (i + 1);
+
+    button.onclick = () => {
+
+      vote = i;
+
+      [
+        ...el.children
+      ].forEach(x =>
+        x.classList.remove("selected")
+      );
+
+      button.classList.add("selected");
+
+    };
+
+    el.appendChild(button);
+
+  }
+
+  show("voting");
+
 }
+
+
+/* =========================================================
+   SUBMIT VOTE
+========================================================= */
 
 function submitVote(){
- if(vote<0){alert("Choose a player first.");return}
- const caught=(vote===spy);
- document.getElementById("resultWord").textContent=word;
- if(caught){
-  document.getElementById("resultIcon").textContent="🕵️";
-  document.getElementById("resultTitle").textContent="THE SPY WAS CAUGHT!";
-  document.getElementById("resultText").textContent="Player "+(spy+1)+" was the Spy. But the Spy gets one final chance!";
-  document.getElementById("guessButton").classList.remove("hidden");
- }else{
-  document.getElementById("resultIcon").textContent="😈";
-  document.getElementById("resultTitle").textContent="THE SPY ESCAPED!";
-  document.getElementById("resultText").textContent="The group did not catch the Spy.";
-document.getElementById("guessButton").classList.add("hidden");
+
+  if(vote < 0){
+
+    alert("Choose a player first.");
+
+    return;
+
+  }
+
+  const caught =
+    vote === spy;
+
+  document
+    .getElementById("resultWord")
+    .textContent =
+      word;
+
+
+  if(caught){
+
+    document
+      .getElementById("resultIcon")
+      .textContent =
+        "🕵️";
+
+    document
+      .getElementById("resultTitle")
+      .textContent =
+        "THE SPY WAS CAUGHT!";
+
+    document
+      .getElementById("resultText")
+      .textContent =
+        "Player " +
+        (spy + 1) +
+        " was the Spy. But the Spy gets one final chance!";
+
+    document
+      .getElementById("guessButton")
+      .classList.remove("hidden");
+
+  }else{
+
+    document
+      .getElementById("resultIcon")
+      .textContent =
+        "😈";
+
+    document
+      .getElementById("resultTitle")
+      .textContent =
+        "THE SPY ESCAPED!";
+
+    document
+      .getElementById("resultText")
+      .textContent =
+        "The group voted for Player " +
+        (vote + 1) +
+        ", but they were not the Spy.";
+
+    document
+      .getElementById("guessButton")
+      .classList.add("hidden");
+
+  }
+
+  show("result");
+
 }
-show("result");
-}
+
+
+/* =========================================================
+   SPY FINAL GUESS
+========================================================= */
 
 function showGuess(){
-show("guess");
+
+  document
+    .getElementById("guessInput")
+    .value = "";
+
+  show("guess");
+
 }
+
 
 function checkGuess(){
-const guess=document.getElementById("guessInput").value.trim().toLowerCase();
 
-if(!guess){
-alert("Enter your guess first.");
-return;
+  const input =
+    document.getElementById("guessInput");
+
+  const guess =
+    input.value
+      .trim()
+      .toLowerCase();
+
+  if(!guess){
+
+    alert("Enter your guess first.");
+
+    return;
+
+  }
+
+  const correct =
+    guess ===
+    word
+      .trim()
+      .toLowerCase();
+   if(correct){
+
+    document
+      .getElementById("winnerIcon")
+      .textContent = "🕵️";
+
+    document
+      .getElementById("winnerTitle")
+      .textContent = "SPY WINS!";
+
+    document
+      .getElementById("winnerText")
+      .textContent =
+        "The Spy guessed the secret word correctly!";
+
+  }else{
+
+    document
+      .getElementById("winnerIcon")
+      .textContent = "🏆";
+
+    document
+      .getElementById("winnerTitle")
+      .textContent = "CITIZENS WIN!";
+
+    document
+      .getElementById("winnerText")
+      .textContent =
+        "The Spy guessed incorrectly. The citizens win!";
+
+  }
+
+  show("winner");
+
 }
 
-if(guess===word.toLowerCase()){
-document.getElementById("winnerIcon").textContent="🕵️";
-document.getElementById("winnerTitle").textContent="THE SPY WINS!";
-document.getElementById("winnerText").textContent="The Spy guessed the secret word correctly!";
-}else{
-document.getElementById("winnerIcon").textContent="🏆";
-document.getElementById("winnerTitle").textContent="CITIZENS WIN!";
-document.getElementById("winnerText").textContent="The Spy guessed incorrectly. The citizens win!";
-}
 
-show("winner");
-}
+/* =========================================================
+   NEW ROUND
+========================================================= */
 
 function newRound(){
-if(timerId){
-clearInterval(timerId);
-timerId=null;
+
+  if(timerId){
+
+    clearInterval(timerId);
+
+    timerId = null;
+
+  }
+
+  spy = -1;
+
+  current = 0;
+
+  used = [];
+
+  vote = -1;
+
+  timer = 60;
+
+  word = "";
+
+  clue = "";
+
+  document
+    .getElementById("guessInput")
+    .value = "";
+
+  renderCategories();
+
+  renderNumbers();
+
+  show("category");
+
 }
 
-spy=-1;
-current=0;
-used=[];
-vote=-1;
-timer=60;
-document.getElementById("guessInput").value="";
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   INITIALIZE GAME
+========================================================= */
+
 renderCategories();
-renderNumbers();
-show("category");
-}
 
-function escapeHtml(s){
-return String(s)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-}
-
-renderCategories();
 renderNumbers();
+
 </script>
 
 </body>
